@@ -1,35 +1,39 @@
-import React, { Component } from 'react'
+import React from 'react'
+import Facturas from './components/facturas/Facturas'
 import './App.css'
-import { constants } from 'crypto';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      proveedores : []
-    }
-    this.componentDidMount = this.componentDidMount.bind(this);
-  }
-  
-  async componentDidMount() {
-    const response = await fetch('api/proveedores')
-    const json = await response.json();
-    const result = json
-    this.setState({proveedores: result})
-  }
-
-  render() {
-        
-    return (
-      <div className="App">
-        <h1> HOLA</h1> 
-        {this.state.proveedores.map(el => (
+export default function App() {
+  return (
+    <Router>
+      <div>
+        <nav>
+          <ul>
             <li>
-              {el.nombre}
+              <Link to="/">Home</Link>
             </li>
-          ))}
+            <li>
+              <Link to="/about">About</Link>
+            </li>
+            <li>
+              <Link to="/users">Users</Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Switch>
+          <Route path="/">
+            <Facturas />
+          </Route>
+        </Switch>
       </div>
-    )
-  }
+    </Router>
+  );
 }
-export default App
