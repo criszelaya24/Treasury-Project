@@ -1,0 +1,22 @@
+.container {
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-top: 3%;
+}
+
+.ListaFactura {
+    margin-left: 1%;
+    margin-right: 1%;
+}
+.spacedButtons{
+    margin-left: 50%;
+}
+
+.tableFacturas{
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.selectorEmpresa{
+    margin-left: 2%;
+}
