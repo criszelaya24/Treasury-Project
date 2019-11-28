@@ -54,6 +54,22 @@ export default class Facturas extends Component {
         this.setState({id_empresa: event.target.value})
     }
 
+    getFacturasList(){
+        let filtered = this.state.facturas.filter(factura => {return (factura.empresa === this.state.id_empresa)});
+        let sorted = filtered.sort(function (a, b) {
+            console.log(a);
+            console.log(b);
+            if (a.fecha > b.fecha) {
+                return 1;
+            }
+            if (b.fecha > a.fecha) {
+                return -1;
+            }
+            return 0;
+        });
+        return sorted;
+    }
+
     render() {
         let selector;
         if (this.state.empresas.length){
@@ -74,7 +90,7 @@ export default class Facturas extends Component {
             selector = <CircularProgress className="circularProgress"/>
         }
         let tabla;
-        const filteredFacturas = this.state.facturas.filter(factura => {return (factura.empresa === this.state.id_empresa)});
+        const filteredFacturas = this.getFacturasList()
         if (this.state.facturasLoaded && this.state.proveedoresLoaded){
             tabla = <div className='tableFacturas'><TablaFacturas rows={filteredFacturas} proveedores={this.state.proveedores} /></div>;
         } else {
