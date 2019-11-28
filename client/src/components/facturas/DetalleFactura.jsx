@@ -136,7 +136,7 @@ class DetalleFactura extends Component {
                     </Grid>
                     <Grid item>
                         <Fab color="secondary" aria-label="add" className={classes.margin}>
-                            <PublishIcon/>
+                            <PublishIcon />
                         </Fab>
                     </Grid>
                 </Grid>
