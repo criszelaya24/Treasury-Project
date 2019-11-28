@@ -11,6 +11,8 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { withStyles} from '@material-ui/core/styles';
+import PublishIcon from '@material-ui/icons/Publish';
+import Fab from '@material-ui/core/Fab';
 
 const styles = theme => ({
   buttons: {    
@@ -131,6 +133,11 @@ class DetalleFactura extends Component {
                             variant="outlined"
                             label="Ingresar Comentario" 
                         />
+                    </Grid>
+                    <Grid item>
+                        <Fab color="secondary" aria-label="add" className={classes.margin}>
+                            <PublishIcon/>
+                        </Fab>
                     </Grid>
                 </Grid>
                 </List>

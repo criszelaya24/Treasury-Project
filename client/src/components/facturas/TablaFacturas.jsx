@@ -17,6 +17,12 @@ const styles = theme => ({
 });
 
 class TablaFacturas extends Component {
+
+  getProveedorName(id){
+    const proveedorName = this.props.proveedores.find(x => x.id === id).nombre;
+    return proveedorName;
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -31,7 +37,6 @@ class TablaFacturas extends Component {
               <TableCell align="center">N° Factura</TableCell>
               <TableCell align="center">Proveedor</TableCell>
               <TableCell align="center">Monto</TableCell>
-              <TableCell align="center">Detalle</TableCell>
               <TableCell align="center">Status</TableCell>
               <TableCell align="center">Acciones</TableCell>
             </TableRow>
@@ -45,9 +50,8 @@ class TablaFacturas extends Component {
                 <TableCell align="center">{row.fecha.substring(0, 10)}</TableCell>
                 <TableCell align="center">{row.vencimiento.substring(0, 10)}</TableCell>
                 <TableCell align="center">{row.numero}</TableCell>
-                <TableCell align="center">{this.props.proveedores[row.proveedor].nombre}</TableCell>
+                <TableCell align="center">{this.getProveedorName(row.proveedor)}</TableCell>
                 <TableCell align="center">{'$' + row.monto + ' ' + row.currency}</TableCell>
-                <TableCell align="center">{row.detalle}</TableCell>
                 <TableCell align="center">{row.status}</TableCell>
                 <TableCell align="center">
                 <Button 
