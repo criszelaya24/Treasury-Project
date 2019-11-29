@@ -14,7 +14,7 @@ const createToken = async (req, res) => {
                         typeUserId: result.rows[0].type_user_id
                     }
                     const token = validatorUser.generateToken(user);
-                    res.status(200).json({message: "User Loged in", token: token})
+                    res.status(201).json({message: "User token", token: token})
                 }
                 res.status(401).json({message: "Wrong password"})
             })

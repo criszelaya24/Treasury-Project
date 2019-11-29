@@ -20,7 +20,6 @@ const isUserSignIn = (req, res, next) => {
     const result = jwt.verify(bearerToken, secretKey);
     req.decoded = result
     next();
-    // res.status(200).json({message: result})
    } catch(err){
     res.sendStatus(403).json({message: "Token Invalid"});
    }

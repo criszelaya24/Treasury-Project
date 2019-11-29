@@ -5,7 +5,6 @@ const proveedoresValidationRules = () => {
   ]
 }
 
-
 module.exports = {
   proveedoresValidationRules,
 }

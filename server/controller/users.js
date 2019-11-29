@@ -3,8 +3,8 @@ const bcrypt = require('bcrypt')
 
 const getAllUsers = async (req, res) => {
     try {
-        pool.query('SELECT * from users', (err, result)=>{
-            if(err) res.status(404).json({message: 'Error at DB'});
+        pool.query('SELECT * from users WHERE email != $1', [req.decoded.email], (err, result)=>{
+            if(err) res.status(400).json({message: 'Error at DB'});
             res.status(200).json({
                 message: 'All users',
                 data: result.rows,
@@ -21,7 +21,7 @@ const createUser = async(req, res) => {
     try{
         pool.query('INSERT INTO users(email, name, password, type_user_id) VALUES ($1, $2, $3, $4) RETURNING *;',[
             email, name, password, parseInt(typeUserId)], (err, result) => {
-                if (err) res.status(404).json({message: err});
+                if (err) res.status(400).json({message: err});
                 res.status(202).json({message: 'user created', user: result.rows[0]})
             })
     }catch(err){
