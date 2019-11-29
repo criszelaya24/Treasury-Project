@@ -203,3 +203,31 @@ traits:
                     {
                         "message": "Internal server error"
                     }
+
+/proveedores/:id:
+  get:
+    is: [withAuthHeaders]
+    description: search an specific proveedor
+    responses:
+      201:
+        body:
+            application/json:
+              example: |
+                {
+                    "id": 2,
+                    "name": "fanatiz"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Proveedor not finded"
+                    }
