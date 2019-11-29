@@ -20,7 +20,6 @@ const signup = async(req, res) => {
     let { email, name, password, typeUserId } = req.body
     password = await bcrypt.hash(req.body.password, 8)
     const token = validatorUser.generateToken({email, typeUserId});
-    console.log(token)
     try{
         pool.query('INSERT INTO users(email, name, password, type_user_id) VALUES ($1, $2, $3, $4) RETURNING *;',[
             email, name, password, parseInt(typeUserId)], (err, result) => {
