@@ -1,0 +1,1 @@
+INSERT INTO proveedores(name) VALUES ('Fanatiz TVO'), ('Joy');
