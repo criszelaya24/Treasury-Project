@@ -1,0 +1,1 @@
+INSERT INTO users(email, name, password, type_user_id) VALUES ("Default", "default@default.com", "123", 1);
