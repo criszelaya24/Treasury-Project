@@ -1,0 +1,233 @@
+#%RAML 1.0
+---
+title: Wilson Tesoreria
+baseUri: http://localhost:500/api/
+version: v1 
+
+traits:
+  withAuthHeaders:
+    headers:
+      Authorization:
+        description: Auth token with the credential returned
+        type: string
+/status:
+  description: check if you're connected
+  get:
+    description: Retrieve all users that are admins
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                "message": "connected"
+              }
+/user_token:
+  description: Token creation
+  post:
+      description: Create new token for user.
+      body:
+        application/json:
+          example: |
+            {
+                "email": "Admin@admin.com",
+                "password": "1234" 
+            }
+      responses:
+        201:
+          body:
+            application/json:
+              example: |
+                {
+                    "message": "User token",
+                    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjY5MjY0MTMsInN1YiI6MSwiZW1haWwiOiJBZG1pbkBhZG1pbi5jb20ifQ.AvlpUsZ1mF53XCU9VjNxR3lxHKe05gt2jsl56YRkhxI"
+                }
+        404:
+            body:
+                application/json:
+                  example: |
+                    {
+                        "message": "User Don't found"
+                    }
+/users:
+  description: Users related endpoints / Must be loged in and with a token
+  post:
+    is: [withAuthHeaders]
+    description: Create new users
+    body:
+          application/json:
+            example: |
+              {
+                    "name": "james1",
+                    "email": "james1@gmail.com",
+                    "password": "1234",
+                    "typeUserId": "1",
+              }
+    responses:
+      202:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "User created",
+                    "user": {
+                        "id": 2,
+                        "name": "james1",
+                        "email": "james1@gmail.com",
+                        "password": "$2a$12$oZq09XlozD19pcYlYwrEBe2/lr6Y2ETNgT.hW.uaFGUKdjDSWzqRS",
+                        "type_user_id": 1
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+  get:
+    is: [withAuthHeaders]
+    description: Retrieve all users excepting current user
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "All users",
+                    "data": [
+                      {
+                          "id": 1,
+                          "name": "james",
+                          "email": "james@gmail.com",
+                          "password": "$2a$12$oZq09XlozD19pcYlYwrEBe2/lr6Y2ETNgT.hW.uaFGUKdjDSWzqRS",
+                          "type_user_id": 1
+                      },
+                      {
+                          "id": 2,
+                          "name": "james1",
+                          "email": "james1@gmail.com",
+                          "password": "$2a$12$oZq09XlozD19pcYlYwrEBe2/lr6Y2ETNgT.hW.uaFGUKdjDSWzqRS",
+                          "type_user_id": 1
+                      }
+                    ]
+                }
+      400:
+          body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Error at DB"
+                    }
+      500:
+          body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Internal server error"
+                    }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+/proveedores:
+  description: proveedores related endpoints / Must be loged in and with a token
+  post:
+    is: [withAuthHeaders]
+    description: Create new proovedores
+    body:
+          application/json:
+            example: |
+              {
+                    "name": "fanatiz"
+              }
+    responses:
+      201:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "proveedor created",
+                    "proveedor": {
+                        "id": 2,
+                        "name": "fanatiz"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+  get:
+    is: [withAuthHeaders]
+    description: Retrieve all proveedores
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "All proveedores",
+                    "data": [
+                      {
+                          "id": 1,
+                          "name": "Fanatiz"
+                      },
+                      {
+                          "id": 2,
+                          "name": "Joy"
+                      }
+                    ]
+                }
+      404:
+          body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Not provider found"
+                    }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      500:
+          body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Internal server error"
+                    }
+
+/proveedores/:id:
+  get:
+    is: [withAuthHeaders]
+    description: search an specific proveedor
+    responses:
+      201:
+        body:
+            application/json:
+              example: |
+                {
+                    "id": 2,
+                    "name": "fanatiz"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Proveedor not finded"
+                    }
