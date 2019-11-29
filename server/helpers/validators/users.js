@@ -7,11 +7,11 @@ const generateToken = (user) => {
     return token
 }
 
-const verifyToken = (req, res, next) => {
+const isUserSignIn = (req, res, next) => {
   // Get auth header value
   const bearerHeader = req.headers['authorization'];
   // Check if bearer is undefined
-  if(typeof bearerHeader === 'undefined') res.sendStatus(403);
+  if(typeof bearerHeader === 'undefined') res.status(403).json({message: "Token Invalid"});
    // Split at the space
    const bearer = bearerHeader.split(' ');
    // Get token from array
@@ -22,7 +22,7 @@ const verifyToken = (req, res, next) => {
     next();
     // res.status(200).json({message: result})
    } catch(err){
-     res.status(404).json({message: err})
+    res.sendStatus(403).json({message: "Token Invalid"});
    }
 }
 
@@ -35,8 +35,16 @@ const usersValidationRules = () => {
     ]
   }
 
+  const logInValidationRules = () => {
+    return [
+      body('email').isEmail().withMessage('Need to be a valida email'),
+      body('password').not().isEmpty().withMessage('Password must be fill'),
+    ]
+  }
+
 module.exports = {
     usersValidationRules,
     generateToken,
-    verifyToken
+    isUserSignIn,
+    logInValidationRules
 }
