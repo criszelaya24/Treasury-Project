@@ -22,21 +22,9 @@ const verifyToken = (req, res, next) => {
     next();
     // res.status(200).json({message: result})
    } catch(err){
-     res.status(404).json({error: err})
+     res.status(404).json({message: err})
    }
-  //  jwt.verify(bearerToken, secretKey, (err, authData) => {
-  //   if(err) {
-  //     res.sendStatus(403);
-  //   }
-  //   res.status(200).json({
-  //     message: 'Auth verify complete',
-  //     authData
-  //   })
-  // }
 }
-    // // Next middleware
-    // next();
-
 
 const usersValidationRules = () => {
     return [
