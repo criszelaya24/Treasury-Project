@@ -15,7 +15,7 @@ const createProveedores = async (req, res) => {
   try {
     pool.query('INSERT INTO proveedores(name) VALUES($1) RETURNING *', [req.body.name], (err, result)=>{
       if (err) res.status(404).json({message: err});
-      res.status(201).json({message: 'proveedor created', proveedor: result.rows[0]})
+      if(result) res.status(201).json({message: 'proveedor created', proveedor: result.rows[0]});
     })
   } catch(err) {
     res.status(500).json({ message: err })

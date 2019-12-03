@@ -51,21 +51,6 @@ app.get('/api/facturas/:id', cors(), async (req, res, next) => {
   }
 }) 
 
-
-app.get('/api/empresas/:id', cors(), async (req, res, next) => {
-  try {
-    const id = parseInt(req.params.id, 10);
-    console.log(id)
-    pool.query('SELECT * FROM empresas WHERE id=$1;', [id], (err, result) => {
-      if (err) throw err;
-      values = result.rows
-      res.json(values)
-    });
-  } catch (err) {
-    next(err)
-  }
-})
-
 // end of routes to put on controller
 
 // Anything that doesn't match the above, send back index.html

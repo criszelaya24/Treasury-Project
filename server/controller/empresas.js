@@ -28,7 +28,7 @@ const createEmpresa = async (req, res) => {
     try{
         pool.query('INSERT INTO empresas(nombre) VALUES($1) RETURNING *', [name], (err, result)=>{
             if (err) res.status(404).json({message: err});
-            res.status(201).json({message: 'empresa created', empresa: result.rows[0]})
+            if(result) res.status(201).json({message: 'empresa created', empresa: result.rows[0]});
         })
     }catch(err){
         res.status(500).json({ message: err })
