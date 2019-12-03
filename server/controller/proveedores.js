@@ -3,7 +3,7 @@ const { pool } = require('../db/dbConnection')
 const listProveedores = async (req, res) => {
     try {
       pool.query('SELECT * FROM proveedores;', (err, result) => {
-        if (err) res.status(404).json({message: 'Not provider found'});
+        if (err) res.status(404).json({message: 'Not proveedores found'});
         res.status(200).json({message: "All proveedores", data: result.rows})
       });
     } catch (err) {
@@ -15,7 +15,7 @@ const createProveedores = async (req, res) => {
   try {
     pool.query('INSERT INTO proveedores(name) VALUES($1) RETURNING *', [req.body.name], (err, result)=>{
       if (err) res.status(404).json({message: err});
-        res.status(201).json({message: 'proveedor created', proveedor: result.rows[0]})
+      res.status(201).json({message: 'proveedor created', proveedor: result.rows[0]})
     })
   } catch(err) {
     res.status(500).json({ message: err })

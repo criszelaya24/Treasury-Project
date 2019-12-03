@@ -187,7 +187,7 @@ traits:
                 application/json:
                   example: |
                     {
-                        "message": "Not provider found"
+                        "message": "Not proveedores found"
                     }
       403:
         body:
@@ -267,4 +267,58 @@ traits:
                   example: |
                     {
                         "message": "Not empresas found"
+                    }
+  post:
+    is: [withAuthHeaders]
+    description: Create new empresa
+    body:
+          application/json:
+            example: |
+              {
+                    "nombre": "fanatiz"
+              }
+    responses:
+      201:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "empresa created",
+                    "empresa": {
+                        "id": 2,
+                        "name": "fanatiz"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+/empresas/:id:
+  get:
+    is: [withAuthHeaders]
+    description: search an specific empresa
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "id": 2,
+                    "name": "fanatiz"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "empresa not finded"
                     }
