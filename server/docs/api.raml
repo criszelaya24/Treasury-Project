@@ -209,7 +209,7 @@ traits:
     is: [withAuthHeaders]
     description: search an specific proveedor
     responses:
-      201:
+      200:
         body:
             application/json:
               example: |
@@ -230,4 +230,41 @@ traits:
                   example: |
                     {
                         "message": "Proveedor not finded"
+                    }
+
+/empresas:
+  get:
+    is: [withAuthHeaders]
+    description: search all empresas
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "All empresas",
+                    "data": [
+                      {
+                          "id": 1,
+                          "name": "Fanatiz"
+                      },
+                      {
+                          "id": 2,
+                          "name": "Joy"
+                      }
+                    ]
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Not empresas found"
                     }
