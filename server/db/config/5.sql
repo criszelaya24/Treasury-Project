@@ -1,0 +1,1 @@
+CREATE TABLE empresas ( id SERIAL PRIMARY KEY, nombre VARCHAR(10));

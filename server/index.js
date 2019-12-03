@@ -18,6 +18,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const proveedores = require('./routes/proveedores')
 const users = require('./routes/users')
 const userToken = require('./routes/token')
+const empresas = require('./routes/empresas')
 
 // Serve static files from the React frontend app
 app.use(express.static(path.join(__dirname, '/../client/build')));
@@ -34,18 +35,6 @@ app.get('/api/status', cors(), async (req, res, next) => {
 // routes to put on controller
 app.get('/api/facturas', cors(), async (req, res, next) => {
   res.status(200)
-})
-
-app.get('/api/empresas', cors(), async (req, res, next) => {
-  try {
-    pool.query('SELECT * FROM empresas;', (err, result) => {
-      if (err) throw err;
-      values = result.rows
-      res.json(values)
-    });
-  } catch (err) {
-    next(err)
-  }
 })
 
 app.get('/api/facturas/:id', cors(), async (req, res, next) => {
@@ -89,6 +78,7 @@ app.get('*', (req, res) => {
 app.use('/api/proveedores', cors(), proveedores)
 app.use('/api/users', cors(), users)
 app.use('/api/user_token', cors(), userToken)
+app.use('/api/empresas', cors(), empresas)
 
 // Choose the port and start the server
 const PORT = process.env.PORT || 5000
