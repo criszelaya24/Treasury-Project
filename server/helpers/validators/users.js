@@ -21,7 +21,7 @@ const isUserSignIn = (req, res, next) => {
     req.decoded = result
     next();
    } catch(err){
-    res.sendStatus(403).json({message: "Token Invalid"});
+    res.status(403).json({message: "Token Invalid"});
    }
 }
 
