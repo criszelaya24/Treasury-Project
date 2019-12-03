@@ -27,7 +27,7 @@ const findProveedores = async (req, res) => {
     const id = parseInt(req.params.id, 10);
     console.log(id)
     pool.query('SELECT * FROM proveedores WHERE id=$1;', [id], (err, result) => {
-      if (err) res.status(404).json({message: "Proveedor not finded"});
+      if (err || result.rows.length < 1) res.status(404).json({message: "Proveedor not finded"});
       res.status(200).json(result.rows[0])
     });
   } catch (err) {
