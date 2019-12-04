@@ -13,7 +13,7 @@ traits:
 /status:
   description: check if you're connected
   get:
-    description: Retrieve all users that are admins
+    description: varify if you have connection
     responses:
       200:
         body:
@@ -50,7 +50,7 @@ traits:
                         "message": "User Don't found"
                     }
 /users:
-  description: Users related endpoints / Must be loged in and with a token
+  description: Users related endpoints / Must be logged in and with a token
   post:
     is: [withAuthHeaders]
     description: Create new users
@@ -133,6 +133,7 @@ traits:
                         "message": "Token Invalid"
                     }
 /users/:id:
+  description: Individual user endpoint
   get:
     is: [withAuthHeaders]
     description: search an specific user
@@ -164,7 +165,7 @@ traits:
                     }
   delete:
     is: [withAuthHeaders]
-    description: delete an specific proveedor
+    description: Delete an specific user
     responses:
       200:
         body:
@@ -188,9 +189,10 @@ traits:
                         "message": "user not finded"
                     }             
 /users/types:
+  description: All type of users endpoint
   get:
     is: [withAuthHeaders]
-    description: retrieve all type of users
+    description: Retrieve all type of users
     responses:
       200:
         body:
@@ -251,9 +253,10 @@ traits:
                         "message": "Token Invalid"
                     }
 /users/types/:id:
+  description: Specific type of user endpoint
   get:
     is: [withAuthHeaders]
-    description: search an specific type of user
+    description: Search an specific type of user
     responses:
       200:
         body:
@@ -279,7 +282,7 @@ traits:
                     }
   delete:
     is: [withAuthHeaders]
-    description: delete an specific proveedor
+    description: Delete an specific type of user
     responses:
       200:
         body:
@@ -303,7 +306,7 @@ traits:
                         "message": "type of user not finded"
                     }
 /proveedores:
-  description: proveedores related endpoints / Must be loged in and with a token
+  description: Proveedores related endpoints / Must be loged in and with a token
   post:
     is: [withAuthHeaders]
     description: Create new proovedores
@@ -375,9 +378,10 @@ traits:
                     }
 
 /proveedores/:id:
+  description: Individual proveedor enpoint
   get:
     is: [withAuthHeaders]
-    description: search an specific proveedor
+    description: Search an specific proveedor
     responses:
       200:
         body:
@@ -403,7 +407,7 @@ traits:
                     }
   delete:
     is: [withAuthHeaders]
-    description: delete an specific proveedor
+    description: Delete an specific proveedor
     responses:
       200:
         body:
@@ -428,9 +432,10 @@ traits:
                     }
 
 /empresas:
+  description: All empresas endpoint
   get:
     is: [withAuthHeaders]
-    description: search all empresas
+    description: Search all empresas
     responses:
       200:
         body:
@@ -491,9 +496,10 @@ traits:
                         "message": "Token Invalid"
                     }
 /empresas/:id:
+  description: Specific empresa endpoint
   get:
     is: [withAuthHeaders]
-    description: search an specific empresa
+    description: Search an specific empresa
     responses:
       200:
         body:
@@ -519,7 +525,7 @@ traits:
                     }
   delete:
     is: [withAuthHeaders]
-    description: delete an specific empresa
+    description: Delete an specific empresa
     responses:
       200:
         body:
@@ -543,9 +549,10 @@ traits:
                         "message": "empresa not finded"
                     }
 /facturas:
+  description: All facturas endpoint
   get:
     is: [withAuthHeaders]
-    description: retrieve all facturas
+    description: Retrieve all facturas
     responses:
       200:
         body:
@@ -595,9 +602,10 @@ traits:
                         "message": "Not facturas found"
                     }
 /facturas/:id:
+  description: Individual factura endpoint
   get:
     is: [withAuthHeaders]
-    description: search an specific factura
+    description: Search an specific factura
     responses:
       200:
         body:
@@ -631,7 +639,7 @@ traits:
                     }
   delete:
     is: [withAuthHeaders]
-    description: delete an specific factura
+    description: Delete an specific factura
     responses:
       200:
         body:
