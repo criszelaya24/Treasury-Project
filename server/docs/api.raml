@@ -385,6 +385,31 @@ traits:
                     {
                         "message": "empresa not finded"
                     }
+  delete:
+    is: [withAuthHeaders]
+    description: delete an specific empresa
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "Empresa deleted"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "empresa not finded"
+                    }
 /facturas:
   get:
     is: [withAuthHeaders]

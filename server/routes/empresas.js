@@ -7,5 +7,6 @@ const { empresaSearchRules, empresasValidationRules } = require('../helpers/vali
 
 router.get('/', isUserSignIn, empresasController.listEmpresas)
 router.get('/:id', isUserSignIn, empresaSearchRules(), validate, empresasController.listSpecificEmpresa)
+router.delete('/:id', isUserSignIn, empresaSearchRules(), validate, empresasController.deleteSpecificEmpresa)
 router.post('/', isUserSignIn, empresasValidationRules(), validate, empresasController.createEmpresa)
 module.exports = router
