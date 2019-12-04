@@ -36,7 +36,7 @@ const usersValidationRules = () => {
 
 const logInValidationRules = () => {
   return [
-    body('email').isEmail().withMessage('Need to be a valida email'),
+    body('email').isEmail().withMessage('Need to be a valida email').not().isEmpty().withMessage('email must be fill'),
     body('password').not().isEmpty().withMessage('Password must be fill'),
   ]
 }

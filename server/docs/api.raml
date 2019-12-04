@@ -28,6 +28,15 @@ traits:
       description: Create new token for user.
       body:
         application/json:
+          properties:
+              email:
+                description: email of the user
+                type: string
+                required: true
+              password:
+                description: password of the user
+                type: string
+                required: true
           example: |
             {
                 "email": "Admin@admin.com",
@@ -56,6 +65,23 @@ traits:
     description: Create new users
     body:
           application/json:
+            properties:
+              name:
+                description: Name of the user
+                type: string
+                required: true
+              email:
+                description: email of the user
+                type: string
+                required: true
+              password:
+                description: password of the user
+                type: string
+                required: true
+              typeUserId:
+                description: : type of user
+                type: int
+                required: true
             example: |
               {
                     "name": "james1",
@@ -137,6 +163,11 @@ traits:
   get:
     is: [withAuthHeaders]
     description: search an specific user
+    queryParameters:
+      id:
+        description: id of the user
+        type: int
+        required: true
     responses:
       200:
         body:
@@ -166,6 +197,11 @@ traits:
   delete:
     is: [withAuthHeaders]
     description: Delete an specific user
+    queryParameters:
+      id:
+        description: id of the user
+        type: int
+        required: true
     responses:
       200:
         body:
@@ -230,6 +266,11 @@ traits:
     description: Create new type of user
     body:
           application/json:
+            properties:
+              name:
+                description: Name of the role
+                type: string
+                required: true
             example: |
               {
                     "name": "Super admin"
@@ -257,6 +298,11 @@ traits:
   get:
     is: [withAuthHeaders]
     description: Search an specific type of user
+    queryParameters:
+      id:
+        description: id of the user's type
+        type: int
+        required: true
     responses:
       200:
         body:
@@ -283,6 +329,11 @@ traits:
   delete:
     is: [withAuthHeaders]
     description: Delete an specific type of user
+    queryParameters:
+      id:
+        description: id of the user's type
+        type: int
+        required: true
     responses:
       200:
         body:
@@ -312,6 +363,11 @@ traits:
     description: Create new proovedores
     body:
           application/json:
+            properties:
+              name:
+                description: Name of the proveedor
+                type: string
+                required: true
             example: |
               {
                     "name": "fanatiz"
@@ -382,6 +438,11 @@ traits:
   get:
     is: [withAuthHeaders]
     description: Search an specific proveedor
+    queryParameters:
+      id:
+        description: id of the proveedor
+        type: int
+        required: true
     responses:
       200:
         body:
@@ -408,6 +469,11 @@ traits:
   delete:
     is: [withAuthHeaders]
     description: Delete an specific proveedor
+    queryParameters:
+      id:
+        description: id of the proovedor
+        type: int
+        required: true
     responses:
       200:
         body:
@@ -473,6 +539,11 @@ traits:
     description: Create new empresa
     body:
           application/json:
+            properties:
+              nombre:
+                description: Name of the empresa
+                type: string
+                required: true
             example: |
               {
                     "nombre": "fanatiz"
@@ -500,6 +571,11 @@ traits:
   get:
     is: [withAuthHeaders]
     description: Search an specific empresa
+    queryParameters:
+      id:
+        description: id of the empresa
+        type: int
+        required: true
     responses:
       200:
         body:
@@ -526,6 +602,11 @@ traits:
   delete:
     is: [withAuthHeaders]
     description: Delete an specific empresa
+    queryParameters:
+      id:
+        description: id of the empresa
+        type: int
+        required: true
     responses:
       200:
         body:
@@ -606,6 +687,11 @@ traits:
   get:
     is: [withAuthHeaders]
     description: Search an specific factura
+    queryParameters:
+      id:
+        description: id of the factura
+        type: int
+        required: true
     responses:
       200:
         body:
@@ -640,6 +726,11 @@ traits:
   delete:
     is: [withAuthHeaders]
     description: Delete an specific factura
+    queryParameters:
+      id:
+        description: id of the factura
+        type: int
+        required: true
     responses:
       200:
         body:
