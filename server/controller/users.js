@@ -29,24 +29,8 @@ const createUser = async(req, res) => {
     }
 }
 
-const getTypeOfUsers = async(req, res) => {
-    console.log('hey')
-    try{
-        pool.query('SELECT * FROM types_users', (err, result) => {
-            if(err) res.status(400).json({message: 'Error at DB'});
-            res.status(200).json({
-                message: 'All type of users',
-                data: result.rows
-            })
-        })
-    }catch(err){
-        res.status(500).json({message: 'Internal server error'})
-    }
-}
-
 
 module.exports = {
     getAllUsers,
-    createUser,
-    getTypeOfUsers
+    createUser
 }

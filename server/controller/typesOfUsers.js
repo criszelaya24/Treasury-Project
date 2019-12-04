@@ -1,0 +1,30 @@
+const { pool } = require('../db/dbConnection')
+const getTypeOfUsers = async(req, res) => {
+    try{
+        pool.query('SELECT * FROM types_users', (err, result) => {
+            if(err) res.status(400).json({message: 'Error at DB'});
+            res.status(200).json({
+                message: 'All type of users',
+                data: result.rows
+            })
+        })
+    }catch(err){
+        res.status(500).json({message: 'Internal server error'})
+    }
+}
+
+const creatNewTypeOfUser = async (req, res) => {
+    try{
+        pool.query('INSERT INTO types_users(name) VALUES($1) RETURNING *', [req.body.name], (err, result)=>{
+            if (err) res.status(404).json({message: err});
+            if(result) res.status(201).json({message: 'New type of user created', type_user: result.rows[0]});
+          })
+    }catch(err){
+        res.status(500).json({message: 'Internal server error'})
+    }
+}
+
+module.exports = {
+    getTypeOfUsers,
+    creatNewTypeOfUser
+}

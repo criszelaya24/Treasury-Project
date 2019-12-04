@@ -168,6 +168,33 @@ traits:
                     {
                         "message": "Error at DB"
                     }
+  post:
+    is: [withAuthHeaders]
+    description: Create new type of user
+    body:
+          application/json:
+            example: |
+              {
+                    "name": "Super admin"
+              }
+    responses:
+      201:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "New type of user created",
+                    "type_user": {
+                        "id": 2,
+                        "name": "Super admin"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
 /proveedores:
   description: proveedores related endpoints / Must be loged in and with a token
   post:
