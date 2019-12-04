@@ -828,7 +828,7 @@ traits:
 /currencies/:id:
   get:
     is: [withAuthHeaders]
-    description: Retrieve all currencies
+    description: Retrieve individual currencies
     queryParameters:
       id:
         description: id of the currency
@@ -860,7 +860,7 @@ traits:
                     }
   delete:
     is: [withAuthHeaders]
-    description: Retrieve all currencies
+    description: delete individual currencies
     queryParameters:
       id:
         description: id of the currency
@@ -887,4 +887,131 @@ traits:
                   example: |
                     {
                         "message": "currency not finded"
+                    }
+/status-factura:
+  description: All status factura endpoint
+  get:
+    is: [withAuthHeaders]
+    description: Retrieve all status factura
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                  "message": "All status factura",
+                  "data": [
+                      {
+                          "id": 1,
+                          "name": "Por pagar"
+                      }
+                    ]
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Not status found"
+                    }
+  post:
+    is: [withAuthHeaders]
+    description: Create new status
+    body:
+          application/json:
+            properties:
+              name:
+                description: name of the status
+                type: string
+                required: true
+            example: |
+              {
+                    "name": "Cancelado"
+              }
+    responses:
+      201:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "new status created",
+                    "status": {
+                        "id": 2,
+                        "name": "Cancelado",
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+/status-factura/:id:
+  get:
+    is: [withAuthHeaders]
+    description: Retrieve individual status factura
+    queryParameters:
+      id:
+        description: id of the status
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+               {
+                  "id": 1,
+                  "name": "Por Pagar"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "status factura not finded"
+                    }
+  delete:
+    is: [withAuthHeaders]
+    description: delete individual status
+    queryParameters:
+      id:
+        description: id of the status
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "status factura deleted"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "status factura not finded"
                     }
