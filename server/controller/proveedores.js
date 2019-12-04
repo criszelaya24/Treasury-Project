@@ -33,10 +33,23 @@ const findProveedores = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Internal error' })
   }
-} 
+}
+
+const deleteSpecificProveedor = async (req, res) =>{
+  const id = parseInt(req.params.id, 10);
+  try{
+      pool.query('DELETE FROM proveedores WHERE id = $1;', [id], (err, result) => {
+          if (err || result.rowCount === 0) res.status(404).json({message: 'proveedor not finded'});
+          if(result.rowCount === 1) res.status(200).json({message: 'proveedor deleted'});
+      })
+  }catch(err){
+      res.status(500).json({message: err})
+  }
+}
 
 module.exports = {
     listProveedores,
     createProveedores,
-    findProveedores
+    findProveedores,
+    deleteSpecificProveedor
 }

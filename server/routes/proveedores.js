@@ -8,5 +8,6 @@ const { validate } = require('../helpers/validateResults')
 router.get('/', isUserSignIn, proveedoresController.listProveedores)
 router.post('/', isUserSignIn, proveedoresValidationRules(), validate, proveedoresController.createProveedores)
 router.get('/:id', isUserSignIn ,proveedoresSearchRules(), validate, proveedoresController.findProveedores)
+router.delete('/:id', isUserSignIn ,proveedoresSearchRules(), validate, proveedoresController.deleteSpecificProveedor)
 
   module.exports = router
