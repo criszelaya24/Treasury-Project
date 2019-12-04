@@ -132,6 +132,61 @@ traits:
                     {
                         "message": "Token Invalid"
                     }
+/users/:id:
+  get:
+    is: [withAuthHeaders]
+    description: search an specific user
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "id": 2,
+                    "name": "james1",
+                    "email": "james1@gmail.com",
+                    "password": "$2a$12$oZq09XlozD19pcYlYwrEBe2/lr6Y2ETNgT.hW.uaFGUKdjDSWzqRS",
+                    "type_user_id": 1
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "user not finded"
+                    }
+  delete:
+    is: [withAuthHeaders]
+    description: delete an specific proveedor
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "user deleted"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "user not finded"
+                    }             
 /users/types:
   get:
     is: [withAuthHeaders]

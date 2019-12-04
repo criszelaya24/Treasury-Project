@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { body } = require('express-validator')
+const { body, check } = require('express-validator')
 const secretKey = 'wilson-tesoreria'
 
 const generateToken = (user) => {
@@ -34,16 +34,23 @@ const usersValidationRules = () => {
     ]
   }
 
-  const logInValidationRules = () => {
-    return [
-      body('email').isEmail().withMessage('Need to be a valida email'),
-      body('password').not().isEmpty().withMessage('Password must be fill'),
-    ]
-  }
+const logInValidationRules = () => {
+  return [
+    body('email').isEmail().withMessage('Need to be a valida email'),
+    body('password').not().isEmpty().withMessage('Password must be fill'),
+  ]
+}
+
+const userSearchRules = () => {
+  return [
+    check('id').isNumeric()
+  ]
+}
 
 module.exports = {
     usersValidationRules,
     generateToken,
     isUserSignIn,
-    logInValidationRules
+    logInValidationRules,
+    userSearchRules
 }

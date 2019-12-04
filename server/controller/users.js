@@ -29,8 +29,34 @@ const createUser = async(req, res) => {
     }
 }
 
+const listSpecificUser = async (req, res) => {
+    try{
+        const id = parseInt(req.params.id, 10);
+        pool.query('SELECT * FROM users WHERE id=$1;', [id], (err, result) => {
+            if (err || result.rows.length < 1) res.status(404).json({message: "user not finded"});
+            res.status(200).json(result.rows[0])
+    });
+    }catch(err){
+        res.status(500).json({message: 'Internal server error'})
+    }
+}
+
+const deleteSpecificUser = async (req, res) => {
+    try{
+        const id = parseInt(req.params.id, 10);
+        pool.query('DELETE FROM users WHERE id=$1;', [id], (err, result) => {
+            if (err || result.rowCount === 0) res.status(404).json({message: "user not finded"});
+            if(result.rowCount === 1) res.status(200).json({message: 'user deleted'});
+    });
+    }catch(err){
+        res.status(500).json({message: 'Internal server error'})
+    }
+}
+
 
 module.exports = {
     getAllUsers,
-    createUser
+    createUser,
+    listSpecificUser,
+    deleteSpecificUser
 }
