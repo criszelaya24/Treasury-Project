@@ -696,3 +696,41 @@ traits:
                     {
                         "message": "Not currencies found"
                     }
+  post:
+    is: [withAuthHeaders]
+    description: Create new currency
+    body:
+          application/json:
+            properties:
+              name:
+                description: name of the currency
+                type: string
+                required: true
+              symbol:
+                description: symbol of the currency
+                type: string
+                required: true
+            example: |
+              {
+                    "name": "Peso chileno",
+                    "symbol": "CLP"
+              }
+    responses:
+      201:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "currency created",
+                    "currency": {
+                        "id": 2,
+                        "name": "Peso chileno",
+                        "symbol": "CLP"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }

@@ -8,7 +8,7 @@ const empresaSearchRules = () => {
 
 const empresasValidationRules = () => {
     return [
-      body('nombre').not().isEmpty().withMessage('Name must me fill').isLength({min: 5}).withMessage('Lenght of name needs to be up of 5')
+      body('nombre').not().isEmpty().withMessage('nombre must me fill').isLength({min: 5}).withMessage('Lenght of nombre needs to be up of 5')
     ]
 }
 

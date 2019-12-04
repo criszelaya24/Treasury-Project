@@ -10,6 +10,20 @@ const getAllCurrencies = async (req, res)=> {
         res.status(500).json({message: err})
     }
 }
+
+const createNewCurrency = async (req, res)=>{
+    try{
+        const name = req.body.name
+        const symbol = req.body.symbol
+        pool.query('INSERT INTO currencies(name, symbol) VALUES($1, $2) RETURNING *', [name, symbol], (err, result)=>{
+            if (err) res.status(404).json({message: err});
+            if(result) res.status(201).json({message: 'currency created', currency: result.rows[0]});
+        })
+    }catch(err){
+        res.status(500).json({message: err})
+    }
+}
 module.exports = {
-    getAllCurrencies
+    getAllCurrencies,
+    createNewCurrency
 }
