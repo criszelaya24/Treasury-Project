@@ -24,7 +24,33 @@ const creatNewTypeOfUser = async (req, res) => {
     }
 }
 
+const listSpecificTypeOfUser = async (req, res) => {
+    try{
+        const id = parseInt(req.params.id, 10);
+        pool.query('SELECT * FROM types_users WHERE id=$1;', [id], (err, result) => {
+            if (err || result.rows.length < 1) res.status(404).json({message: "type of user not finded"});
+            res.status(200).json(result.rows[0])
+        });
+    }catch(err){
+        res.status(500).json({message: 'Internal server error'})
+    }
+}
+
+const deleteSpecificTypeOfUser = async (req, res) => {
+    try{
+        const id = parseInt(req.params.id, 10);
+        pool.query('DELETE FROM types_users WHERE id=$1;', [id], (err, result) => {
+            if (err || result.rowCount === 0) res.status(404).json({message: "type of user not finded"});
+            if(result.rowCount === 1) res.status(200).json({message: 'type of user deleted'});
+    });
+    }catch(err){
+        res.status(500).json({message: 'Internal server error'})
+    }
+}
+
 module.exports = {
     getTypeOfUsers,
-    creatNewTypeOfUser
+    creatNewTypeOfUser,
+    listSpecificTypeOfUser,
+    deleteSpecificTypeOfUser
 }

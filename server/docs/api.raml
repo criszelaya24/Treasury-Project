@@ -250,6 +250,58 @@ traits:
                     {
                         "message": "Token Invalid"
                     }
+/users/types/:id:
+  get:
+    is: [withAuthHeaders]
+    description: search an specific type of user
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "id": 1,
+                    "name": "admin"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "type of user not finded"
+                    }
+  delete:
+    is: [withAuthHeaders]
+    description: delete an specific proveedor
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "type of user deleted"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "type of user not finded"
+                    }
 /proveedores:
   description: proveedores related endpoints / Must be loged in and with a token
   post:
