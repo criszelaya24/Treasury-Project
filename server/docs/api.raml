@@ -132,6 +132,42 @@ traits:
                     {
                         "message": "Token Invalid"
                     }
+/users/types:
+  get:
+    is: [withAuthHeaders]
+    description: retrieve all type of users
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "All type of users",
+                    "data": [
+                      {
+                          "id": 1,
+                          "name": "TVO"
+                      },
+                      {
+                          "id": 2,
+                          "name": "Fanatiz"
+                      }
+                    ]
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      400:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Error at DB"
+                    }
 /proveedores:
   description: proveedores related endpoints / Must be loged in and with a token
   post:

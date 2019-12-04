@@ -6,5 +6,6 @@ const { validate } = require('../helpers/validateResults')
 
 router.get('/', isUserSignIn, usersController.getAllUsers)
 router.post('/', isUserSignIn, usersValidationRules(), validate, usersController.createUser)
+router.get('/types', isUserSignIn, usersController.getTypeOfUsers)
 
 module.exports = router
