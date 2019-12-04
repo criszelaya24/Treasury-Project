@@ -497,3 +497,28 @@ traits:
                     {
                         "message": "factura not finded"
                     }
+  delete:
+    is: [withAuthHeaders]
+    description: delete an specific factura
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "factura deleted"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "factura not finded"
+                    }

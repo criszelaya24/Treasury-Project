@@ -7,4 +7,5 @@ const { facturaSearchRules } = require('../helpers/validators/facturas')
 
 router.get('/', isUserSignIn, facturaController.listFacturas)
 router.get('/:id', isUserSignIn, facturaSearchRules(), validate, facturaController.listSpecificFactura)
+router.delete('/:id', isUserSignIn, facturaSearchRules(), validate, facturaController.deleteSpecificFactura)
 module.exports = router

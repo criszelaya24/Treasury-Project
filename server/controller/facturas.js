@@ -24,7 +24,20 @@ const listSpecificFactura = async (req, res) => {
     }
 }
 
+const deleteSpecificFactura = async (req, res) =>{
+    const id = parseInt(req.params.id, 10);
+    try{
+        pool.query('DELETE FROM facturas WHERE id = $1;', [id], (err, result) => {
+            if (err || result.rowCount === 0) res.status(404).json({message: 'factura not finded'});
+            if(result.rowCount === 1) res.status(200).json({message: 'factura deleted'});
+        })
+    }catch(err){
+        res.status(500).json({message: err})
+    }
+}
+
 module.exports = {
     listFacturas,
-    listSpecificFactura
+    listSpecificFactura,
+    deleteSpecificFactura
 }
