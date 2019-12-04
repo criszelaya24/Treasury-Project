@@ -734,3 +734,66 @@ traits:
                     {
                         "message": "Token Invalid"
                     }
+/currencies/:id:
+  get:
+    is: [withAuthHeaders]
+    description: Retrieve all currencies
+    queryParameters:
+      id:
+        description: id of the currency
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+               {
+                  "id": 1,
+                  "name": "Dolar Americano",
+                  "symbol": "USD
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "currency not finded"
+                    }
+  delete:
+    is: [withAuthHeaders]
+    description: Retrieve all currencies
+    queryParameters:
+      id:
+        description: id of the currency
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "currency deleted"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "currency not finded"
+                    }

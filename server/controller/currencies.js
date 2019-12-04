@@ -23,7 +23,33 @@ const createNewCurrency = async (req, res)=>{
         res.status(500).json({message: err})
     }
 }
+
+const listSpecificCurreny = async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    try {
+        pool.query('SELECT * FROM currencies WHERE id = $1;', [id], (err, result) => {
+            if (err || result.rows.length < 1) res.status(404).json({message: 'currency not finded'});
+            res.status(200).json(result.rows[0])
+        })
+    }catch(err) {
+        res.status(500).json({message: err})
+    }
+}
+
+const deleteSpecificCurrency = async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    try{
+        pool.query('DELETE FROM currencies WHERE id = $1;', [id], (err, result) => {
+            if (err || result.rowCount === 0) res.status(404).json({message: 'currency not finded'});
+            if(result.rowCount === 1) res.status(200).json({message: 'currency deleted'});
+        })
+    }catch(err){
+        res.status(500).json({message: err})
+    }
+}
 module.exports = {
     getAllCurrencies,
-    createNewCurrency
+    createNewCurrency,
+    listSpecificCurreny,
+    deleteSpecificCurrency
 }
