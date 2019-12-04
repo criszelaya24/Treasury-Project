@@ -18,6 +18,7 @@ const users = require('./routes/users')
 const userToken = require('./routes/token')
 const empresas = require('./routes/empresas')
 const facturas = require('./routes/facturas')
+const currencies = require('./routes/currencies')
 
 // Serve static files from the React frontend app
 app.use(express.static(path.join(__dirname, '/../client/build')));
@@ -43,6 +44,7 @@ app.use('/api/users', cors(), users)
 app.use('/api/user_token', cors(), userToken)
 app.use('/api/empresas', cors(), empresas)
 app.use('/api/facturas', cors(), facturas)
+app.use('/api/currencies', cors(), currencies)
 
 // Choose the port and start the server
 const PORT = process.env.PORT || 5000

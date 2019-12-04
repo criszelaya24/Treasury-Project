@@ -662,3 +662,37 @@ traits:
                     {
                         "message": "factura not finded"
                     }
+/currencies:
+  description: All currencies endpoint
+  get:
+    is: [withAuthHeaders]
+    description: Retrieve all currencies
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                  "message": "All currencies",
+                  "data": [
+                      {
+                          "id": 1,
+                          "name": "Dolar Americano",
+                          "symbol": "USD"
+                      }
+                    ]
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Not currencies found"
+                    }
