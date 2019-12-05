@@ -60,7 +60,8 @@ const createNewFactura = async (req, res) => {
     if(vencimiento > fecha)
     {
         try{
-            pool.query('INSERT INTO facturas(numero, proveedor, currency_id, monto, detalle, fecha, vencimiento, status_id, empresa) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;',
+            pool.query('INSERT INTO facturas(numero, proveedor, currency_id, monto, detalle, fecha, vencimiento, status_id, empresa) \
+                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;',
             [numero, proveedor, currency, monto, detalle, fecha, vencimiento, status, empresa], (err, result) => {
                 if (err) {
                     if (err.code === '23505'){
