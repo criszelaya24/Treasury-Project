@@ -22,7 +22,7 @@ const createUser = async(req, res) => {
         pool.query('INSERT INTO users(email, name, password, type_user_id) VALUES ($1, $2, $3, $4) RETURNING *;',[
             email, name, password, parseInt(typeUserId)], (err, result) => {
                 if (err) res.status(400).json({message: err});
-                if(result) res.status(202).json({message: 'user created', user: result.rows[0]});
+                if(result) res.status(201).json({message: 'user created', user: result.rows[0]});
             })
     }catch(err){
         res.status(500).json({message: 'Internal server error'})

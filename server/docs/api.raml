@@ -643,28 +643,30 @@ traits:
                     "message": "All facturas",
                     "data": [
                       {
-                          "id": 1,
-                          "numero": 1,
-                          "proveedor": 1,
-                          "currency": "usd",
-                          "monto": 200,
-                          "detalle": "pago",
-                          "fecha": 1232190830,
-                          "vencimiento": 123123123,
-                          "status": "por pagar",
-                          "empresa": 1
+                          "id": 2,
+                          "numero": 2010,
+                          "proveedor_name": "fanatiz",
+                          "currency": "Dolar Americano",
+                          "symbol_currency": "USD",
+                          "monto": "10000",
+                          "detalle": "pago internet",
+                          "fecha": "1575340290000",
+                          "vencimiento": "1577156400000",
+                          "status": "Por Pagar",
+                          "empresa": "empresa"
                       },
                       {
-                          "id": 2,
-                          "numero": 2,
-                          "proveedor": 2,
-                          "currency": "usd",
-                          "monto": 200,
-                          "detalle": "pago",
-                          "fecha": 1232190830,
-                          "vencimiento": 123123123,
-                          "status": "por pagar",
-                          "empresa": 1
+                          "id": 4,
+                          "numero": 2011,
+                          "proveedor_name": "fanatiz",
+                          "currency": "Dolar Americano",
+                          "symbol_currency": "USD",
+                          "monto": "10000",
+                          "detalle": "Pago internet",
+                          "fecha": "1575340290000",
+                          "vencimiento": "1577156400000",
+                          "status": "Por Pagar",
+                          "empresa": "empresa"
                       }
                     ]
                 }
@@ -681,6 +683,94 @@ traits:
                   example: |
                     {
                         "message": "Not facturas found"
+                    }
+  post:
+    is: [withAuthHeaders]
+    description: Create new factura
+    body:
+          application/json:
+            properties:
+              numero:
+                description: numero from factura
+                type: int
+                required: true
+              proveedor:
+                description: : ID from proveedor
+                type: int
+                required: true
+              currency:
+                description: ID from currency
+                type: int
+                required: true
+              monto:
+                description: Monto from factura
+                type: int
+                required: true
+              detalle:
+                description: details from factura
+                type: string
+                required: false
+              fecha:
+                description: created date from factura / format yyyy-mm-dd hh:mm:ss
+                type: date
+                required: true
+              vencimiento:
+                description: expiration date from factura / format yyyy-mm-dd hh:mm:ss
+                type: date
+                required: true
+              status:
+                description: id status from factura
+                type: int
+                required: true
+              empresa:
+                description: id from empresa link to factura
+                type: int
+                required: true
+            example: |
+              {
+                    "numero": 2019,
+                    "proveedor": 4,
+                    "currency": 1,
+                    "monto": 10000,
+                    "detalle": "Pago internet",
+                    "fecha": "2019-12-11 23:31:30",
+                    "vencimiento":"2019-12-25 00:00:00",
+                    "status": 1,
+                    "empresa": 3
+              }
+    responses:
+      201:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "factura created",
+                    "factura": {
+                        "id": 34,
+                        "numero": 2020,
+                        "proveedor": 4,
+                        "currency_id": 1,
+                        "monto": "10000",
+                        "detalle": "Pago internet",
+                        "fecha": "1576117890000",
+                        "vencimiento": "1577242800000",
+                        "status_id": 1,
+                        "empresa": 3
+                    }
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      406:
+         body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Vencimiento cannot be less than fecha"
                     }
 /facturas/:id:
   description: Individual factura endpoint

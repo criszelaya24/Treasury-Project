@@ -2,7 +2,13 @@ const { pool } = require('../db/dbConnection')
 
 const listFacturas = async (req, res) => {
     try{
-        pool.query('SELECT * FROM facturas;', (err, result) => {
+        pool.query('SELECT facturas.id, facturas.numero, proveedores.name as proveedor_name, \
+                    currencies.name as currency, currencies.symbol as symbol_currency, facturas.monto, facturas.detalle, facturas.fecha, facturas.vencimiento, \
+                    status_facturas.name as status, empresas.nombre as empresa FROM facturas \
+                    INNER JOIN proveedores on proveedores.id = facturas.proveedor \
+                    INNER JOIN currencies on currencies.id = facturas.currency_id \
+                    INNER JOIN status_facturas on status_facturas.id = facturas.status_id \
+                    INNER JOIN empresas on empresas.id = facturas.empresa order by facturas.numero;', (err, result) => { 
             if (err) res.status(404).json({message: 'Not facturas found'});
             res.status(200).json({message: "All facturas", data: result.rows})
         })
@@ -58,7 +64,7 @@ const createNewFactura = async (req, res) => {
                         res.status(400).json({message: err});
                     }
                 }
-                if(result) res.status(202).json({message: 'factura created', user: result.rows[0]});
+                if(result) res.status(201).json({message: 'factura created', factura: result.rows[0]});
             })
         }catch(err){
             res.status(500).json({message: err})
