@@ -49,7 +49,8 @@ traits:
               example: |
                 {
                     "message": "User token",
-                    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjY5MjY0MTMsInN1YiI6MSwiZW1haWwiOiJBZG1pbkBhZG1pbi5jb20ifQ.AvlpUsZ1mF53XCU9VjNxR3lxHKe05gt2jsl56YRkhxI"
+                    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjY5MjY0MTMsInN1YiI6MSwiZW1haWwiOiJBZG1pbkBhZG1pbi5jb20ifQ.AvlpUsZ1mF53XCU9VjNxR3lxHKe05gt2jsl56YRkhxI",
+                    "expire_at": 1575644815
                 }
         404:
             body:
@@ -57,6 +58,13 @@ traits:
                   example: |
                     {
                         "message": "User Don't found"
+                    }
+        401:
+            body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Wrong password"
                     }
 /users:
   description: Users related endpoints / Must be logged in and with a token
@@ -789,16 +797,17 @@ traits:
               example: |
                 {
                     "id": 2,
-                    "numero": 2,
-                    "proveedor": 2,
-                    "currency": "usd",
-                    "monto": 200,
-                    "detalle": "pago",
-                    "fecha": 1232190830,
-                    "vencimiento": 123123123,
-                    "status": "por pagar",
-                    "empresa": 1
-                  }
+                    "numero": 2010,
+                    "proveedor_name": "fanatiz",
+                    "currency": "Dolar Americano",
+                    "symbol_currency": "USD",
+                    "monto": "10000",
+                    "detalle": "pago internet",
+                    "fecha": "1575340290000",
+                    "vencimiento": "1577156400000",
+                    "status": "Por Pagar",
+                    "empresa": "empresa"
+                }
       403:
         body:
                 application/json:

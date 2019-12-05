@@ -4,7 +4,8 @@ const secretKey = 'wilson-tesoreria'
 
 const generateToken = (user) => {
     const token = jwt.sign(user, secretKey, { expiresIn: '1d' });
-    return token
+    const info = jwt.verify(token, secretKey);
+    return [token, info]
 }
 
 const isUserSignIn = (req, res, next) => {

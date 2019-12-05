@@ -20,8 +20,13 @@ const listFacturas = async (req, res) => {
 const listSpecificFactura = async (req, res) => {
     try{
         const id = parseInt(req.params.id, 10);
-        console.log(id)
-        pool.query('SELECT * FROM facturas WHERE id=$1;', [id], (err, result) => {
+        pool.query('SELECT facturas.id, facturas.numero, proveedores.name as proveedor_name, \
+                    currencies.name as currency, currencies.symbol as symbol_currency, facturas.monto, facturas.detalle, facturas.fecha, facturas.vencimiento, \
+                    status_facturas.name as status, empresas.nombre as empresa FROM facturas \
+                    INNER JOIN proveedores on proveedores.id = facturas.proveedor \
+                    INNER JOIN currencies on currencies.id = facturas.currency_id \
+                    INNER JOIN status_facturas on status_facturas.id = facturas.status_id \
+                    INNER JOIN empresas on empresas.id = facturas.empresa WHERE facturas.id=$1;', [id], (err, result) => {
             if (err || result.rows.length < 1) res.status(404).json({message: 'factura not finded'});
             res.status(200).json(result.rows[0])
         })
