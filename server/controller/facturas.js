@@ -46,15 +46,25 @@ const createNewFactura = async (req, res) => {
     const vencimiento = Date.parse(req.body.vencimiento)
     const status = parseInt(req.body.status, 10);
     const empresa = parseInt(req.body.empresa, 10);
-    try{
-        pool.query('INSERT INTO facturas(numero, proveedor, currency_id, monto, detalle, fecha, vencimiento, status_id, empresa) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;',
-        [numero, proveedor, currency, monto, detalle, fecha, vencimiento, status, empresa], (err, result) => {
-            if (err.code === '23505') res.status(406).json({message: 'Factura with proveedor already exist'});
-            if (err) res.status(400).json({message: err});
-            if(result) res.status(202).json({message: 'factura created', user: result.rows[0]});
-        })
-    }catch(err){
-        res.status(500).json({message: err})
+    if(vencimiento > fecha)
+    {
+        try{
+            pool.query('INSERT INTO facturas(numero, proveedor, currency_id, monto, detalle, fecha, vencimiento, status_id, empresa) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;',
+            [numero, proveedor, currency, monto, detalle, fecha, vencimiento, status, empresa], (err, result) => {
+                if (err) {
+                    if (err.code === '23505'){
+                        res.status(406).json({message: 'Factura with proveedor already exist'});
+                    } else {
+                        res.status(400).json({message: err});
+                    }
+                }
+                if(result) res.status(202).json({message: 'factura created', user: result.rows[0]});
+            })
+        }catch(err){
+            res.status(500).json({message: err})
+        }
+    } else{
+        res.status(406).json({message: 'Vencimiento cannot be less than fecha'});
     }
 }
 
