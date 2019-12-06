@@ -13,7 +13,7 @@ traits:
 /status:
   description: check if you're connected
   get:
-    description: Retrieve all users that are admins
+    description: varify if you have connection
     responses:
       200:
         body:
@@ -28,6 +28,15 @@ traits:
       description: Create new token for user.
       body:
         application/json:
+          properties:
+              email:
+                description: email of the user
+                type: string
+                required: true
+              password:
+                description: password of the user
+                type: string
+                required: true
           example: |
             {
                 "email": "Admin@admin.com",
@@ -40,7 +49,8 @@ traits:
               example: |
                 {
                     "message": "User token",
-                    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjY5MjY0MTMsInN1YiI6MSwiZW1haWwiOiJBZG1pbkBhZG1pbi5jb20ifQ.AvlpUsZ1mF53XCU9VjNxR3lxHKe05gt2jsl56YRkhxI"
+                    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjY5MjY0MTMsInN1YiI6MSwiZW1haWwiOiJBZG1pbkBhZG1pbi5jb20ifQ.AvlpUsZ1mF53XCU9VjNxR3lxHKe05gt2jsl56YRkhxI",
+                    "expire_at": 1575644815
                 }
         404:
             body:
@@ -49,19 +59,43 @@ traits:
                     {
                         "message": "User Don't found"
                     }
+        401:
+            body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Wrong password"
+                    }
 /users:
-  description: Users related endpoints / Must be loged in and with a token
+  description: Users related endpoints / Must be logged in and with a token
   post:
     is: [withAuthHeaders]
     description: Create new users
     body:
           application/json:
+            properties:
+              name:
+                description: Name of the user
+                type: string
+                required: true
+              email:
+                description: email of the user
+                type: string
+                required: true
+              password:
+                description: password of the user
+                type: string
+                required: true
+              typeUserId:
+                description: : type of user
+                type: int
+                required: true
             example: |
               {
                     "name": "james1",
                     "email": "james1@gmail.com",
                     "password": "1234",
-                    "typeUserId": "1",
+                    "typeUserId": 1,
               }
     responses:
       202:
@@ -132,13 +166,216 @@ traits:
                     {
                         "message": "Token Invalid"
                     }
+/users/:id:
+  description: Individual user endpoint
+  get:
+    is: [withAuthHeaders]
+    description: search an specific user
+    queryParameters:
+      id:
+        description: id of the user
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "id": 2,
+                    "name": "james1",
+                    "email": "james1@gmail.com",
+                    "password": "$2a$12$oZq09XlozD19pcYlYwrEBe2/lr6Y2ETNgT.hW.uaFGUKdjDSWzqRS",
+                    "type_user_id": 1
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "user not finded"
+                    }
+  delete:
+    is: [withAuthHeaders]
+    description: Delete an specific user
+    queryParameters:
+      id:
+        description: id of the user
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "user deleted"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "user not finded"
+                    }             
+/users/types:
+  description: All type of users endpoint
+  get:
+    is: [withAuthHeaders]
+    description: Retrieve all type of users
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "All type of users",
+                    "data": [
+                      {
+                          "id": 1,
+                          "name": "TVO"
+                      },
+                      {
+                          "id": 2,
+                          "name": "Fanatiz"
+                      }
+                    ]
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      400:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Error at DB"
+                    }
+  post:
+    is: [withAuthHeaders]
+    description: Create new type of user
+    body:
+          application/json:
+            properties:
+              name:
+                description: Name of the role
+                type: string
+                required: true
+            example: |
+              {
+                    "name": "Super admin"
+              }
+    responses:
+      201:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "New type of user created",
+                    "type_user": {
+                        "id": 2,
+                        "name": "Super admin"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+/users/types/:id:
+  description: Specific type of user endpoint
+  get:
+    is: [withAuthHeaders]
+    description: Search an specific type of user
+    queryParameters:
+      id:
+        description: id of the user's type
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "id": 1,
+                    "name": "admin"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "type of user not finded"
+                    }
+  delete:
+    is: [withAuthHeaders]
+    description: Delete an specific type of user
+    queryParameters:
+      id:
+        description: id of the user's type
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "type of user deleted"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "type of user not finded"
+                    }
 /proveedores:
-  description: proveedores related endpoints / Must be loged in and with a token
+  description: Proveedores related endpoints / Must be loged in and with a token
   post:
     is: [withAuthHeaders]
     description: Create new proovedores
     body:
           application/json:
+            properties:
+              name:
+                description: Name of the proveedor
+                type: string
+                required: true
             example: |
               {
                     "name": "fanatiz"
@@ -187,7 +424,7 @@ traits:
                 application/json:
                   example: |
                     {
-                        "message": "Not provider found"
+                        "message": "Not proveedores found"
                     }
       403:
         body:
@@ -205,11 +442,17 @@ traits:
                     }
 
 /proveedores/:id:
+  description: Individual proveedor enpoint
   get:
     is: [withAuthHeaders]
-    description: search an specific proveedor
+    description: Search an specific proveedor
+    queryParameters:
+      id:
+        description: id of the proveedor
+        type: int
+        required: true
     responses:
-      201:
+      200:
         body:
             application/json:
               example: |
@@ -230,4 +473,644 @@ traits:
                   example: |
                     {
                         "message": "Proveedor not finded"
+                    }
+  delete:
+    is: [withAuthHeaders]
+    description: Delete an specific proveedor
+    queryParameters:
+      id:
+        description: id of the proovedor
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "proveedor deleted"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "proveedor not finded"
+                    }
+
+/empresas:
+  description: All empresas endpoint
+  get:
+    is: [withAuthHeaders]
+    description: Search all empresas
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "All empresas",
+                    "data": [
+                      {
+                          "id": 1,
+                          "name": "Fanatiz"
+                      },
+                      {
+                          "id": 2,
+                          "name": "Joy"
+                      }
+                    ]
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Not empresas found"
+                    }
+  post:
+    is: [withAuthHeaders]
+    description: Create new empresa
+    body:
+          application/json:
+            properties:
+              nombre:
+                description: Name of the empresa
+                type: string
+                required: true
+            example: |
+              {
+                    "nombre": "fanatiz"
+              }
+    responses:
+      201:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "empresa created",
+                    "empresa": {
+                        "id": 2,
+                        "name": "fanatiz"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+/empresas/:id:
+  description: Specific empresa endpoint
+  get:
+    is: [withAuthHeaders]
+    description: Search an specific empresa
+    queryParameters:
+      id:
+        description: id of the empresa
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "id": 2,
+                    "name": "fanatiz"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "empresa not finded"
+                    }
+  delete:
+    is: [withAuthHeaders]
+    description: Delete an specific empresa
+    queryParameters:
+      id:
+        description: id of the empresa
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "Empresa deleted"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "empresa not finded"
+                    }
+/facturas:
+  description: All facturas endpoint
+  get:
+    is: [withAuthHeaders]
+    description: Retrieve all facturas
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "All facturas",
+                    "data": [
+                      {
+                          "id": 2,
+                          "numero": 2010,
+                          "proveedor_name": "fanatiz",
+                          "currency": "Dolar Americano",
+                          "symbol_currency": "USD",
+                          "monto": "10000",
+                          "detalle": "pago internet",
+                          "fecha": "1575340290000",
+                          "vencimiento": "1577156400000",
+                          "status": "Por Pagar",
+                          "empresa": "empresa"
+                      },
+                      {
+                          "id": 4,
+                          "numero": 2011,
+                          "proveedor_name": "fanatiz",
+                          "currency": "Dolar Americano",
+                          "symbol_currency": "USD",
+                          "monto": "10000",
+                          "detalle": "Pago internet",
+                          "fecha": "1575340290000",
+                          "vencimiento": "1577156400000",
+                          "status": "Por Pagar",
+                          "empresa": "empresa"
+                      }
+                    ]
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Not facturas found"
+                    }
+  post:
+    is: [withAuthHeaders]
+    description: Create new factura
+    body:
+          application/json:
+            properties:
+              numero:
+                description: numero from factura
+                type: int
+                required: true
+              proveedor:
+                description: ID from proveedor
+                type: int
+                required: true
+              currency:
+                description: ID from currency
+                type: int
+                required: true
+              monto:
+                description: Monto from factura
+                type: int
+                required: true
+              detalle:
+                description: details from factura
+                type: string
+                required: false
+              fecha:
+                description: created date from factura / format yyyy-mm-dd hh:mm:ss
+                type: date
+                required: true
+              vencimiento:
+                description: expiration date from factura / format yyyy-mm-dd hh:mm:ss
+                type: date
+                required: true
+              status:
+                description: id status from factura
+                type: int
+                required: true
+              empresa:
+                description: id from empresa linked to factura
+                type: int
+                required: true
+            example: |
+              {
+                    "numero": 2019,
+                    "proveedor": 4,
+                    "currency": 1,
+                    "monto": 10000,
+                    "detalle": "Pago internet",
+                    "fecha": "2019-12-11 23:31:30",
+                    "vencimiento":"2019-12-25 00:00:00",
+                    "status": 1,
+                    "empresa": 3
+              }
+    responses:
+      201:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "factura created",
+                    "factura": {
+                        "id": 34,
+                        "numero": 2020,
+                        "proveedor": 4,
+                        "currency_id": 1,
+                        "monto": "10000",
+                        "detalle": "Pago internet",
+                        "fecha": "1576117890000",
+                        "vencimiento": "1577242800000",
+                        "status_id": 1,
+                        "empresa": 3
+                    }
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      406:
+         body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Vencimiento cannot be less than fecha"
+                    }
+/facturas/:id:
+  description: Individual factura endpoint
+  get:
+    is: [withAuthHeaders]
+    description: Search an specific factura
+    queryParameters:
+      id:
+        description: id of the factura
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "id": 2,
+                    "numero": 2010,
+                    "proveedor_name": "fanatiz",
+                    "currency": "Dolar Americano",
+                    "symbol_currency": "USD",
+                    "monto": "10000",
+                    "detalle": "pago internet",
+                    "fecha": "1575340290000",
+                    "vencimiento": "1577156400000",
+                    "status": "Por Pagar",
+                    "empresa": "empresa"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "factura not finded"
+                    }
+  delete:
+    is: [withAuthHeaders]
+    description: Delete an specific factura
+    queryParameters:
+      id:
+        description: id of the factura
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "factura deleted"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "factura not finded"
+                    }
+/currencies:
+  description: All currencies endpoint
+  get:
+    is: [withAuthHeaders]
+    description: Retrieve all currencies
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                  "message": "All currencies",
+                  "data": [
+                      {
+                          "id": 1,
+                          "name": "Dolar Americano",
+                          "symbol": "USD"
+                      }
+                    ]
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Not currencies found"
+                    }
+  post:
+    is: [withAuthHeaders]
+    description: Create new currency
+    body:
+          application/json:
+            properties:
+              name:
+                description: name of the currency
+                type: string
+                required: true
+              symbol:
+                description: symbol of the currency
+                type: string
+                required: true
+            example: |
+              {
+                    "name": "Peso chileno",
+                    "symbol": "CLP"
+              }
+    responses:
+      201:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "currency created",
+                    "currency": {
+                        "id": 2,
+                        "name": "Peso chileno",
+                        "symbol": "CLP"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+/currencies/:id:
+  get:
+    is: [withAuthHeaders]
+    description: Retrieve individual currencies
+    queryParameters:
+      id:
+        description: id of the currency
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+               {
+                  "id": 1,
+                  "name": "Dolar Americano",
+                  "symbol": "USD
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "currency not finded"
+                    }
+  delete:
+    is: [withAuthHeaders]
+    description: delete individual currencies
+    queryParameters:
+      id:
+        description: id of the currency
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "currency deleted"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "currency not finded"
+                    }
+/status-factura:
+  description: All status factura endpoint
+  get:
+    is: [withAuthHeaders]
+    description: Retrieve all status factura
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                  "message": "All status factura",
+                  "data": [
+                      {
+                          "id": 1,
+                          "name": "Por pagar"
+                      }
+                    ]
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Not status found"
+                    }
+  post:
+    is: [withAuthHeaders]
+    description: Create new status
+    body:
+          application/json:
+            properties:
+              name:
+                description: name of the status
+                type: string
+                required: true
+            example: |
+              {
+                    "name": "Cancelado"
+              }
+    responses:
+      201:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "new status created",
+                    "status": {
+                        "id": 2,
+                        "name": "Cancelado",
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+/status-factura/:id:
+  get:
+    is: [withAuthHeaders]
+    description: Retrieve individual status factura
+    queryParameters:
+      id:
+        description: id of the status
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+               {
+                  "id": 1,
+                  "name": "Por Pagar"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "status factura not finded"
+                    }
+  delete:
+    is: [withAuthHeaders]
+    description: delete individual status
+    queryParameters:
+      id:
+        description: id of the status
+        type: int
+        required: true
+    responses:
+      200:
+        body:
+            application/json:
+              example: |
+                {
+                    "message": "status factura deleted"
+                }
+      403:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "Token Invalid"
+                    }
+      404:
+        body:
+                application/json:
+                  example: |
+                    {
+                        "message": "status factura not finded"
                     }

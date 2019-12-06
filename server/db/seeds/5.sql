@@ -1,0 +1,1 @@
+INSERT INTO status_facturas(name) VALUES ('Por Pagar');

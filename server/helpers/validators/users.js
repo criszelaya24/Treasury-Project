@@ -1,10 +1,11 @@
 const jwt = require('jsonwebtoken')
-const { body } = require('express-validator')
+const { body, check } = require('express-validator')
 const secretKey = 'wilson-tesoreria'
 
 const generateToken = (user) => {
     const token = jwt.sign(user, secretKey, { expiresIn: '1d' });
-    return token
+    const info = jwt.verify(token, secretKey);
+    return [token, info]
 }
 
 const isUserSignIn = (req, res, next) => {
@@ -21,7 +22,7 @@ const isUserSignIn = (req, res, next) => {
     req.decoded = result
     next();
    } catch(err){
-    res.sendStatus(403).json({message: "Token Invalid"});
+    res.status(403).json({message: "Token Invalid"});
    }
 }
 
@@ -34,16 +35,23 @@ const usersValidationRules = () => {
     ]
   }
 
-  const logInValidationRules = () => {
-    return [
-      body('email').isEmail().withMessage('Need to be a valida email'),
-      body('password').not().isEmpty().withMessage('Password must be fill'),
-    ]
-  }
+const logInValidationRules = () => {
+  return [
+    body('email').isEmail().withMessage('Need to be a valida email').not().isEmpty().withMessage('email must be fill'),
+    body('password').not().isEmpty().withMessage('Password must be fill'),
+  ]
+}
+
+const userSearchRules = () => {
+  return [
+    check('id').isNumeric()
+  ]
+}
 
 module.exports = {
     usersValidationRules,
     generateToken,
     isUserSignIn,
-    logInValidationRules
+    logInValidationRules,
+    userSearchRules
 }
