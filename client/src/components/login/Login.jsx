@@ -10,7 +10,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { CircularProgress } from '@material-ui/core';
-import {setCookie, getCookie} from '../helpers/cookies';
+import {
+    Redirect,
+  } from "react-router-dom";
 
 const styles = theme => ({
   paper: {
@@ -38,8 +40,10 @@ class Login extends Component {
         this.state = { 
             email: '',
             password: '',
-            onSubmit: false
+            onSubmit: false,
+            redirect: false
         };
+        console.log(this.props)
         this.handleChange = this.handleChange.bind(this)
         this.onSubmit = this.onSubmit.bind(this)
 
@@ -64,7 +68,9 @@ class Login extends Component {
                 }),
               });
         response = await response.json()
-        setCookie('token', response.token, 1)
+        console.log(response)
+        this.props.signIn(response)
+        this.setState({redirect: true})
     }
 
     render() {
@@ -84,11 +90,20 @@ class Login extends Component {
             >
             Sign In
         </Button>
+        let redirect = this.state.redirect ? 
+        <Redirect
+              to={{
+                pathname: "/"
+              }}
+        />
+        :
+        <p></p>
         return (
             <div>
                 <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <div className={classes.paper}>
+                    {redirect}
                     <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                     </Avatar>

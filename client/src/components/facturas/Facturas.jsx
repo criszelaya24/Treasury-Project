@@ -12,8 +12,8 @@ import AddIcon from '@material-ui/icons/Add';
 
 
 export default class Facturas extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = { 
             facturas: [],
             empresasLoaded: false,
@@ -27,19 +27,34 @@ export default class Facturas extends Component {
     }
     
     async getEmpresas(){
-        const response = await fetch('/api/empresas');
+        const response = await fetch('/api/empresas', {
+            headers: new Headers({
+                'Authorization': 'Bearer ' + this.props.user.token, 
+            })
+        });
         const json = await response.json();
-        this.setState({ empresas: json, empresasLoaded: true});
+        console.log(json.data)
+        this.setState({ empresas: json.data, empresasLoaded: true});
     }
 
     async getFacturas(){
-        const response = await fetch('/api/facturas');
+        const response = await fetch('/api/facturas', {
+            headers: new Headers({
+                'Authorization': 'Bearer ' + this.props.user.token, 
+            })
+        }
+        );
         const json = await response.json();
-        this.setState({ facturas: json, facturasLoaded: true});
+        console.log(json.data)
+        this.setState({ facturas: json.data, facturasLoaded: true});
     }
 
     async getProveedores(){
-        const response = await fetch('/api/proveedores');
+        const response = await fetch('/api/proveedores', {
+            headers: new Headers({
+                'Authorization': 'Bearer ' + this.props.user.token, 
+            })
+        });
         const json = await response.json();
         this.setState({ proveedores: json, proveedoresLoaded: true});
     }
@@ -55,7 +70,7 @@ export default class Facturas extends Component {
     }
 
     getFacturasList(){
-        let filtered = this.state.facturas.filter(factura => {return (factura.empresa === this.state.id_empresa)});
+        let filtered = this.state.facturas.size > 0 ? this.state.facturas.filter(factura => {return (factura.empresa === this.state.id_empresa)}) : [];
         let sorted = filtered.sort(function (a, b) {
             console.log(a);
             console.log(b);
@@ -72,7 +87,7 @@ export default class Facturas extends Component {
 
     render() {
         let selector;
-        if (this.state.empresas.length){
+        if (this.state.empresas.length > 0){
             selector =  <div className='selectorEmpresa'>
                                 <InputLabel id="demo-simple-select-label">Empresa</InputLabel>
                                 <Select
@@ -109,7 +124,7 @@ export default class Facturas extends Component {
                     </Grid>
                     <Grid item xs={3}>
                         <div className='spacedButtons'>
-                            <Fab color="primary" aria-label="add" >
+                            <Fab href = {'facturas/new'} color="primary" aria-label="add" >
                                 <AddIcon />
                             </Fab>
                         </div>
