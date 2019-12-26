@@ -19,8 +19,7 @@ export default class Facturas extends Component {
             empresasLoaded: false,
             id_empresa: 1,
             empresas: [],
-            proveedores: [],
-            proveedoresLoaded: false,
+            nombreEmpresa: 'Fanatiz',
             facturasLoaded: false,
         };
         this.handleEmpresaChange = this.handleEmpresaChange.bind(this);
@@ -49,28 +48,23 @@ export default class Facturas extends Component {
         this.setState({ facturas: json.data, facturasLoaded: true});
     }
 
-    async getProveedores(){
-        const response = await fetch('/api/proveedores', {
-            headers: new Headers({
-                'Authorization': 'Bearer ' + this.props.user.token, 
-            })
-        });
-        const json = await response.json();
-        this.setState({ proveedores: json, proveedoresLoaded: true});
-    }
-    
     async componentDidMount() {
         this.getEmpresas();
         this.getFacturas();
-        this.getProveedores();
     }
 
     handleEmpresaChange(event){
+        console.log(event)
         this.setState({id_empresa: event.target.value})
+        let empresa_actual =  this.state.empresas.filter(empresa => {return (empresa.id === event.target.value)})[0].nombre
+        console.log(empresa_actual)
+        this.setState({nombreEmpresa: empresa_actual})
     }
 
     getFacturasList(){
-        let filtered = this.state.facturas.size > 0 ? this.state.facturas.filter(factura => {return (factura.empresa === this.state.id_empresa)}) : [];
+        console.log(this.state.facturas.length)
+        let filtered = this.state.facturas.length > 0 ? this.state.facturas.filter(factura => {return (factura.empresa === this.state.nombreEmpresa)}) : [];
+        console.log(filtered)
         let sorted = filtered.sort(function (a, b) {
             console.log(a);
             console.log(b);
@@ -106,7 +100,7 @@ export default class Facturas extends Component {
         }
         let tabla;
         const filteredFacturas = this.getFacturasList()
-        if (this.state.facturasLoaded && this.state.proveedoresLoaded){
+        if (this.state.facturasLoaded){
             tabla = <div className='tableFacturas'><TablaFacturas rows={filteredFacturas} proveedores={this.state.proveedores} /></div>;
         } else {
             tabla = <CircularProgress />;

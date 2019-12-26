@@ -24,9 +24,10 @@ const styles = theme => ({
 class DetalleFactura extends Component {
     constructor(props) {
         super(props);
+        console.log(this.props)
         this.state = {
             classes: this.props.styles,
-            id: this.props.match.params.id,
+            id: 1,
             facturasLoaded: false,
             proveedor: '',
             empresa: '',
@@ -55,7 +56,8 @@ class DetalleFactura extends Component {
     async getFactura(){
         const response = await fetch('/api/facturas/' + this.state.id);
         const json = await response.json();
-        let factura = json[0]
+        let factura = json
+        console.log(factura)
         this.setState({ factura: factura, facturasLoaded: true});
     }
 

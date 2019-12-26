@@ -23,6 +23,10 @@ class TablaFacturas extends Component {
     return proveedorName;
   }
 
+  getDateFormat(fecha){
+    return fecha.getFullYear() + "-" + (fecha.getMonth() + 1) + "-" + fecha.getDate()
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -47,10 +51,10 @@ class TablaFacturas extends Component {
                 <TableCell component="th" scope="row">
                   {row.id}
                 </TableCell>
-                <TableCell align="center">{row.fecha.substring(0, 10)}</TableCell>
-                <TableCell align="center">{row.vencimiento.substring(0, 10)}</TableCell>
+                <TableCell align="center">{this.getDateFormat(new Date(row.fecha))}</TableCell>
+                <TableCell align="center">{this.getDateFormat(new Date(row.vencimiento))}</TableCell>
                 <TableCell align="center">{row.numero}</TableCell>
-                <TableCell align="center">{this.getProveedorName(row.proveedor)}</TableCell>
+                <TableCell align="center">{row.proveedor_name}</TableCell>
                 <TableCell align="center">{'$' + row.monto + ' ' + row.currency}</TableCell>
                 <TableCell align="center">{row.status}</TableCell>
                 <TableCell align="center">

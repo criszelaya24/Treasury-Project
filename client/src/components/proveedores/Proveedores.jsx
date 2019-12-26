@@ -2,14 +2,11 @@ import React, { Component } from 'react'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import FormGroup from '@material-ui/core/FormGroup';
 import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Fab from '@material-ui/core/Fab';
@@ -26,6 +23,7 @@ export default class Proveedores extends Component {
             proveedores: [],
             proveedoresLoaded: false,
             creating: false,
+            deleting: false,
             nuevoProveedor: ''
         };
         this.handleChange = this.handleChange.bind(this);
@@ -56,22 +54,44 @@ export default class Proveedores extends Component {
     
     async createNew(){
         this.setState({creating:true})
+        console.log('Bearer ' + this.props.user.token)
         const body = {name: this.state.nuevoProveedor}
-        console.log(JSON.stringify(body))
         const response = await fetch('/api/proveedores', {
             method: 'POST',
+            body: JSON.stringify(body),
             headers: new Headers({
                 'Authorization': 'Bearer ' + this.props.user.token, 
-            }),
-            body: JSON.stringify(body)
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            })
         }
         );
         const json = await response.json();
-        console.log(json)
         let proveedores = this.state.proveedores
-        proveedores.push(this.state.nuevoProveedor)
+        proveedores.push({id: json.proveedor.id, name: this.state.nuevoProveedor})
         this.setState({proveedores:proveedores, nuevoProveedor: ''})
         this.setState({creating:false})
+    }
+
+    async delete(id){
+        if (!this.state.deleting){
+            console.log(id)
+            this.setState({deleting:true})
+            const response = await fetch('/api/proveedores/'+id, {
+                method: 'DELETE',
+                headers: new Headers({
+                    'Authorization': 'Bearer ' + this.props.user.token, 
+                    'Content-Type': 'application/json'
+                })
+            }
+            );
+            const json = await response.json();
+            let proveedores = this.state.proveedores
+            proveedores = proveedores.filter(prov => prov.id != id);
+            this.setState({proveedores:proveedores})
+            this.setState({deleting:false})
+        }
+        
     }
 
     render() {
@@ -89,10 +109,9 @@ export default class Proveedores extends Component {
                     </Grid>
                     <Grid item xs={4}>
                     <Paper >
-
-                        <List dense={this.state.proveedores}>
+                        <List >
                             {this.state.proveedores.map(prov => {
-                                return <ListItem>
+                                return <ListItem key={prov.id}>
                                 <ListItemAvatar>
                                     <Avatar>
                                     <BusinessIcon />
@@ -101,7 +120,7 @@ export default class Proveedores extends Component {
                                 <ListItemText
                                     primary={prov.name}
                                 />
-                                <ListItemSecondaryAction>
+                                <ListItemSecondaryAction onClick={() => this.delete(prov.id)}>
                                     <IconButton edge="end" aria-label="delete">
                                     <DeleteIcon />
                                     </IconButton>

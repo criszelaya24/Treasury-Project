@@ -14,10 +14,20 @@ import Proveedores from './components/proveedores/Proveedores'
 import Navbar from './components/navbar/Navbar'
 
 
+function get_local(local){
+  try {
+    return JSON.parse(localStorage.getItem(local))
+  }
+  catch(error){
+    return ''
+  }
+}
+
+
 const userContext = React.createContext({
   user: {
     isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false,
-    token: JSON.parse(localStorage.getItem('token'))  || ''
+    token: get_local('token')
   }
 });
 
@@ -27,7 +37,7 @@ export default class App extends React.Component {
   this.state = {
     user: {
       isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false,
-      token: JSON.parse(localStorage.getItem('token'))  || ''
+      token: get_local('token')
     }
   };
   this.signIn = this.signIn.bind(this);
@@ -40,7 +50,7 @@ export default class App extends React.Component {
     this.setState({
       user: {
       isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false,
-      token: JSON.parse(localStorage.getItem('token'))  || ''
+      token: get_local('token')
     }})
   }
 
@@ -52,7 +62,7 @@ export default class App extends React.Component {
     this.setState({
       user: {
       isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false,
-      token: JSON.parse(localStorage.getItem('token'))  || ''
+      token: get_local('token')
     }})
     console.log(this.state)
 
@@ -85,7 +95,7 @@ export default class App extends React.Component {
                       <CreateFactura user={user} />
                     </PrivateRoute>
                     <PrivateRoute path="/facturas/:id" user={user}>
-                      <DetalleFactura />
+                      <DetalleFactura user={user}/>
                     </PrivateRoute>
                     <PrivateRoute path="/" user={user}>
                       <Facturas user={user} />
