@@ -35,28 +35,23 @@ const styles = theme => ({
 });
 
 class Login extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { 
-            email: '',
-            password: '',
-            onSubmit: false,
-            redirect: false
-        };
-        console.log(this.props)
-        this.handleChange = this.handleChange.bind(this)
-        this.onSubmit = this.onSubmit.bind(this)
+    
+    state = { 
+        email: '',
+        password: '',
+        onSubmit: false,
+        redirect: false,
+        errorMessages: null
+    };
 
-    }
-
-    handleChange(event) {
+    handleChange = (event) => {
         this.setState({[event.target.name]: event.target.value});
     }
 
-    async onSubmit(event){
+    onSubmit = (event) => {
         event.preventDefault();
         this.setState({onSubmit: true});
-        let response = await fetch('/api/user_token', {
+        fetch('/api/user_token', {
                 method: 'POST',
                 headers: {
                   Accept: 'application/json',
@@ -66,11 +61,24 @@ class Login extends Component {
                     email: this.state.email,
                     password: this.state.password
                 }),
+              }).then(response => {
+                  if (response.ok) {
+                      response.json().then(values => {
+                        this.props.signIn(values)
+                        this.setState({redirect: true})
+                      })
+                  } else {
+                      response.json().then(values => {
+                          if (!Array.isArray(values.message)){
+                            this.setState({onSubmit: false, errorMessages: values.message});
+                          }else {
+                            this.setState({onSubmit: false});
+                          }
+                      })
+                  }
+              }).catch(err => {
+                this.setState({onSubmit: false});
               });
-        response = await response.json()
-        console.log(response)
-        this.props.signIn(response)
-        this.setState({redirect: true})
     }
 
     render() {
@@ -98,6 +106,7 @@ class Login extends Component {
         />
         :
         <p></p>
+        let err = this.state.errorMessages === null ? null : <Typography component="h1" variant="h5">{this.state.errorMessages}</Typography>
         return (
             <div>
                 <Container component="main" maxWidth="xs">
@@ -110,6 +119,7 @@ class Login extends Component {
                     <Typography component="h1" variant="h5">
                     Sign in
                     </Typography>
+                    {err}
                     <form className={classes.form} noValidate>
                     <TextField
                         variant="outlined"

@@ -7,7 +7,6 @@ import {
 
 
 export default function PrivateRoute({ children, ...rest }) {
-    console.log(rest)
     return (
       <Route
         {...rest}
