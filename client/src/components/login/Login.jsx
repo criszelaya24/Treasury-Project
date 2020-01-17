@@ -106,7 +106,7 @@ class Login extends Component {
         />
         :
         <p></p>
-        let err = this.state.errorMessages === null ? null : <Typography component="h1" variant="h5">{this.state.errorMessages}</Typography>
+        let err = this.state.errorMessages === null ? null : <Typography color="error" component="h1" variant="h3">{this.state.errorMessages}!</Typography>
         return (
             <div>
                 <Container component="main" maxWidth="xs">
