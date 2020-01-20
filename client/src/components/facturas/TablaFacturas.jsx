@@ -1,94 +1,133 @@
-import React, { Component } from 'react'
+import React from 'react'
 import './Facturas.css';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import { withStyles} from '@material-ui/core/styles';
 
-const styles = theme => ({
-  buttons: {    
-    padding: '3%', 
-    marginRight: '2%'  
+const useStyles = makeStyles({
+  root: {
+    width: '100%',
+  },
+  container: {
+    maxHeight: 440,
   },
 });
 
-class TablaFacturas extends Component {
+const columns = [
+  { id: 'id', label: 'ID', minWidth: 30 },
+  { id: 'fecha', label: 'Fecha', minWidth: 30, format: "Date" },
+  { id: 'vencimiento', label: 'Vencimiento', minWidth: 30, format: "Date" },
+  { id: 'numero', label: 'N° Factura', minWidth: 30 },
+  {
+    id: 'monto',
+    label: 'Monto',
+    minWidth: 50,
+    align: 'right',
+  },
+  { id: 'currency', label: 'Currency', minWidth: 40 },
+  { id: 'symbol_currency', label: 'Symbol Currency', minWidth: 40 },
+  { id: 'detalle', label: 'Detalle', minWidth: 40 },
+  { id: 'empresa', label: 'Empresa', minWidth: 40 },
+  {
+    id: 'proveedor_name',
+    label: 'Proveedor',
+    minWidth: 70,
+    align: 'right',
+  },
+  {
+    id: 'status',
+    label: 'Status',
+    minWidth: 70,
+    align: 'right',
+    format: value => value.toFixed(2),
+  },
+  {
+    id: 'Acciones',
+    label: 'Acciones',
+    minWidth: 170,
+    align: 'right',
+    format: "button",
+  },
+];
 
-  getProveedorName(id){
-    const proveedorName = this.props.proveedores.find(x => x.id === id).nombre;
-    return proveedorName;
-  }
+export default function StickyHeadTable(props) {
+  const classes = useStyles();
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  getDateFormat(fecha){
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const getDateFormat = (fecha) => {
     return fecha.getFullYear() + "-" + (fecha.getMonth() + 1) + "-" + fecha.getDate()
   }
 
-  render() {
-    const { classes } = this.props;
-    return (
-      <div>
-        <Paper >
-        <Table  aria-label="simple table">
+  return (
+      <Paper className={classes.root}>
+      <TableContainer className={classes.container}>
+        <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell align="center">Fecha</TableCell>
-              <TableCell align="center">Vencimiento</TableCell>
-              <TableCell align="center">N° Factura</TableCell>
-              <TableCell align="center">Proveedor</TableCell>
-              <TableCell align="center">Monto</TableCell>
-              <TableCell align="center">Status</TableCell>
-              <TableCell align="center">Acciones</TableCell>
+            {columns.map(column => (
+              <TableCell
+                key={column.id}
+                align={column.align}
+                style={{ minWidth: column.minWidth }}
+              >
+                {column.label}
+              </TableCell>
+            ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.props.rows.map(row => (
-              <TableRow key={row.id}>
-                <TableCell component="th" scope="row">
-                  {row.id}
-                </TableCell>
-                <TableCell align="center">{this.getDateFormat(new Date(row.fecha))}</TableCell>
-                <TableCell align="center">{this.getDateFormat(new Date(row.vencimiento))}</TableCell>
-                <TableCell align="center">{row.numero}</TableCell>
-                <TableCell align="center">{row.proveedor_name}</TableCell>
-                <TableCell align="center">{'$' + row.monto + ' ' + row.currency}</TableCell>
-                <TableCell align="center">{row.status}</TableCell>
-                <TableCell align="center">
-                <Button 
-                            variant="contained" 
-                            color="primary"
-                            className={classes.buttons}
-                            href={"/facturas/" + row.id}
-                        >
-                            Ver
-                        </Button>
-                        <Button 
-                            variant="contained" 
-                            color="default" 
-                            className={classes.buttons}
-                        >
-                            Editar
-                        </Button>
-                        <Button 
-                            variant="contained" 
-                            color="secondary"
-                            className={classes.buttons}
-                        >
-                            Eliminar
-                        </Button>
-                </TableCell>
+          {props.rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
+            return (
+              <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                {columns.map(column => {
+                  const value = row[column.id];
+                  return (
+                    <TableCell key={column.id} align={column.align}>
+                      {column.format === 'Date' ? getDateFormat(new Date (parseInt(value))) : value}
+                      {column.format === 'button' ? (
+                        <div>
+                          <Button variant="contained" color="primary" className={classes.buttons} href={"/facturas/" + row.id}>Ver</Button>
+                          <Button variant="contained" color="default" className={classes.buttons}>Editar</Button>
+                          <Button variant="contained" color="secondary"className={classes.buttons}>Eliminar</Button>
+                        </div>
+                      ) : null}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
-            ))}
+            );
+          })}
           </TableBody>
         </Table>
-      </Paper>
-      </div>
-    )
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={props.rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
+    </Paper>
+    );
   }
-}
 
-export default withStyles(styles)(TablaFacturas);
+// export default withStyles(useStyles)(tablaFacturas);

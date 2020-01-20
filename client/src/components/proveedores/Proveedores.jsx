@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import  { Redirect } from 'react-router-dom'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';

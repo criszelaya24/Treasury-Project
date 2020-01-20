@@ -21,6 +21,8 @@ export default class Facturas extends Component {
             empresas: [],
             nombreEmpresa: 'Fanatiz',
             facturasLoaded: false,
+            tokenInvalid: false,
+            filterFacturas: false
         };
         this.handleEmpresaChange = this.handleEmpresaChange.bind(this);
     }
@@ -31,9 +33,12 @@ export default class Facturas extends Component {
                 'Authorization': 'Bearer ' + this.props.user.token, 
             })
         });
-        const json = await response.json();
-        console.log(json.data)
-        this.setState({ empresas: json.data, empresasLoaded: true});
+        if (response.ok){
+            const json = await response.json();
+            this.setState({ empresas: json.data, empresasLoaded: true, tokenInvalid: false});
+        } else {
+            this.setState({tokenInvalid: true})
+        }
     }
 
     async getFacturas(){
@@ -43,9 +48,12 @@ export default class Facturas extends Component {
             })
         }
         );
-        const json = await response.json();
-        console.log(json.data)
-        this.setState({ facturas: json.data, facturasLoaded: true});
+        if (response.ok){
+            const json = await response.json();
+            this.setState({ facturas: json.data, facturasLoaded: true, tokenInvalid: false});
+        } else {
+            this.setState({tokenInvalid: true})
+        }
     }
 
     async componentDidMount() {
@@ -53,21 +61,26 @@ export default class Facturas extends Component {
         this.getFacturas();
     }
 
+    componentDidUpdate() {
+        this.checkStateToken()
+    }
+
+    checkStateToken () {
+        if (this.state.tokenInvalid) this.props.logout();
+    }
+
     handleEmpresaChange(event){
-        console.log(event)
-        this.setState({id_empresa: event.target.value})
-        let empresa_actual =  this.state.empresas.filter(empresa => {return (empresa.id === event.target.value)})[0].nombre
-        console.log(empresa_actual)
-        this.setState({nombreEmpresa: empresa_actual})
+        if (event.target.value === 'all') this.setState({filterFacturas: false});
+        if (event.target.value !== 'all') {
+            this.setState({id_empresa: event.target.value})
+            let empresa_actual =  this.state.empresas.filter(empresa => {return (empresa.id === event.target.value)})[0].nombre
+            this.setState({nombreEmpresa: empresa_actual, filterFacturas: true})
+        }
     }
 
     getFacturasList(){
-        console.log(this.state.facturas.length)
         let filtered = this.state.facturas.length > 0 ? this.state.facturas.filter(factura => {return (factura.empresa === this.state.nombreEmpresa)}) : [];
-        console.log(filtered)
         let sorted = filtered.sort(function (a, b) {
-            console.log(a);
-            console.log(b);
             if (a.fecha > b.fecha) {
                 return 1;
             }
@@ -83,13 +96,14 @@ export default class Facturas extends Component {
         let selector;
         if (this.state.empresas.length > 0){
             selector =  <div className='selectorEmpresa'>
-                                <InputLabel id="demo-simple-select-label">Empresa</InputLabel>
+                                <InputLabel id="demo-simple-select-label">Filter by Empresa</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     onChange={this.handleEmpresaChange}
                                     value = {this.state.id_empresa}
                                     
                                 >
+                                <MenuItem value="all" key="all">All Facturas</MenuItem>
                                 {this.state.empresas.map(row => (
                                         <MenuItem value={row.id} key={row.id}>{row.nombre}</MenuItem>
                                 ))}
@@ -99,7 +113,7 @@ export default class Facturas extends Component {
             selector = <CircularProgress className="circularProgress"/>
         }
         let tabla;
-        const filteredFacturas = this.getFacturasList()
+        const filteredFacturas = this.state.filterFacturas ? this.getFacturasList() : this.state.facturas
         if (this.state.facturasLoaded){
             tabla = <div className='tableFacturas'><TablaFacturas rows={filteredFacturas} proveedores={this.state.proveedores} /></div>;
         } else {

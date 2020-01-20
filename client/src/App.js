@@ -98,12 +98,9 @@ export default class App extends React.Component {
                       <DetalleFactura user={user}/>
                     </PrivateRoute>
                     <PrivateRoute path="/" user={user}>
-                      <Facturas user={user} />
+                      <Facturas user={user} logout={logoutUser} />
                     </PrivateRoute>
                     <PrivateRoute path="/facturas" user={user} signIn={signIn}>
-                      <Facturas />
-                    </PrivateRoute>
-                    <PrivateRoute path="/" user={user}>
                       <Facturas />
                     </PrivateRoute>
                   </Switch>
