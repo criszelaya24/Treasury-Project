@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import  { Redirect } from 'react-router-dom'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -24,7 +25,9 @@ export default class Proveedores extends Component {
             proveedoresLoaded: false,
             creating: false,
             deleting: false,
-            nuevoProveedor: ''
+            nuevoProveedor: '',
+            redirect: false,
+            messageErrors: []
         };
         this.handleChange = this.handleChange.bind(this);
         this.createNew = this.createNew.bind(this);
@@ -42,10 +45,14 @@ export default class Proveedores extends Component {
             })
         }
         );
-        const json = await response.json();
-        console.log(json)
-        this.setState({ proveedores: json.data, proveedoresLoaded: true});
-        console.log(this.state)
+        if (response.ok) {
+            const json = await response.json();
+            console.log(json)
+            this.setState({ proveedores: json.data, proveedoresLoaded: true});
+            this.setState({redirect :false})
+        } else {
+            this.props.logout()
+        }
     }
 
     handleChange(event) {
@@ -66,16 +73,28 @@ export default class Proveedores extends Component {
             })
         }
         );
-        const json = await response.json();
-        let proveedores = this.state.proveedores
-        proveedores.push({id: json.proveedor.id, name: this.state.nuevoProveedor})
-        this.setState({proveedores:proveedores, nuevoProveedor: ''})
-        this.setState({creating:false})
+        if (response.ok) {
+            const json = await response.json();
+            let proveedores = this.state.proveedores
+            proveedores.push({id: json.proveedor.id, name: this.state.nuevoProveedor})
+            this.setState({proveedores:proveedores, nuevoProveedor: ''})
+            this.setState({creating:false})
+            this.setState({messageErrors: []})
+        } else {
+            response.json().then(resp => {
+                resp.message.map((messages) => {
+                    let messageErrors = []
+                    Object.values(messages).forEach(value => {
+                        messageErrors.push(value)
+                        this.setState({messageErrors: messageErrors, creating: false})
+                    })
+                })
+            })
+        }
     }
 
     async delete(id){
         if (!this.state.deleting){
-            console.log(id)
             this.setState({deleting:true})
             const response = await fetch('/api/proveedores/'+id, {
                 method: 'DELETE',
@@ -95,8 +114,11 @@ export default class Proveedores extends Component {
     }
 
     render() {
+        let messageErrors = this.state.messageErrors.length > 0 ? ( this.state.messageErrors.map((message, i) => {
+            return <Typography key={i} color="error" component="h1" variant="h3" align="center">{message}</Typography> })) : null
         return (
             <div>
+            {messageErrors}
                 <div className='container'>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>

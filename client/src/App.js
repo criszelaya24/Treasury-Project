@@ -89,7 +89,7 @@ export default class App extends React.Component {
                       <Login signIn={signIn}/>
                     </Route>
                     <PrivateRoute path="/proveedores" user={user}>
-                      <Proveedores  user={user}/>
+                      <Proveedores  user={user} logout={logoutUser}/>
                     </PrivateRoute>
                     <PrivateRoute path="/facturas/new" user={user}>
                       <CreateFactura user={user} />
